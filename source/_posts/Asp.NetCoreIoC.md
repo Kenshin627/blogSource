@@ -8,6 +8,7 @@ categories:
 - Asp.Net Core
 ---
 #  Asp.Net Core IOC模式
+本系列文章来源于大内老A的博客,对博客内容进行了略微整理,方便自己以后查阅.
 
 ## IoC名词解释
 
