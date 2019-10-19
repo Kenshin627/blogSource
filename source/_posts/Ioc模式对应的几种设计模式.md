@@ -65,6 +65,6 @@ DI:Dependency Injection.含义为依赖注入.DI是一种“对象提供型”�
         }
     }
 
-以上两种方式虽然都解决了针对服务的解耦问题,但是第二种使用方式不能称之为"依赖注入",而是一种被称为"Service Locator"的设计模式.Service Locator模式同样具有一个通过服务注册创建的全局容器来提供所需的服务实例,该容器被称为"Service Locator".DI容器和Service Locator实际上是同一事物在不同设计模型的不同称谓罢了.DI容器和Service Locator之间的差异体现在 __"被谁使用"__.DI容器的使用者是框架自身,Service Locator的使用者是应用程序.
+以上两种方式虽然都解决了针对服务的解耦问题,但是第二种使用方式不能称之为"依赖注入",而是一种被称为"Service Locator"的设计模式.Service Locator模式同样具有一个通过服务注册创建的全局容器来提供所需的服务实例,该容器被称为"Service Locator".DI容器和Service Locator实际上是同一事物在不同设计模型的不同称谓罢了.DI容器和Service Locator之间的差异体现在 __"被谁使用"__.DI容器的使用者是框架自身,Service Locator的使用者是应用程序.一般情况下我们尽可能通过构造器注入的方式使用,尽量不要使用Service Locator模式.
 
 
