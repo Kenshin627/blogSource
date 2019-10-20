@@ -29,5 +29,35 @@ DI框架注册服务时通常会使用三种方式,分别为:
 
 
 ## 生命周期管理
+IServiceProvider之间的层次结构造就了三种不同的生命周期模式：由于Singleton服务实例保存在作为根容器的IServiceProvider对象上，所以它能够在多个同根IServiceProvider对象之间提供真正的单例保证。Scoped服务实例被保存在当前IServiceProvider上，所以它只能在当前IServiceProvider对象的“服务范围”保证的单例的。没有实现IDisposable接口的Transient服务则采用“即用即取，用后即弃”的策略。
 
+接下来我们通过简单的实例来演示三种不同生命周期模式的差异。在如下所示的代码片段中我们创建了一个ServiceCollection对象并针对接口IFoo、IBar和IBaz注册了对应的服务，它们采用的生命周期模式分别为Transient、Scoped和Singleton。在利用ServiceCollection创建出代表DI容器的IServiceProvider对象之后，我们调用其CreateScope方法创建了两个所谓的“服务范围”，后者的ServiceProvider属性返回一个新的IServiceProvider对象，它实际上是当前IServiceProvider对象的子容器。我们最后利用作为子容器的IServiceProvider对象来提供相应的服务实例。
+
+    //根节点的ServiceProvider
+    var root = new ServiceCollection()
+            .AddTransient<IFoo, Foo>()
+            .AddScoped<IBar>(_ => new Bar())
+            .AddSingleton<IBaz, Baz>()
+            .BuildServiceProvider();
+
+    //子节点的ServiceProvider
+    var provider1 = root.CreateScope().ServiceProvider;
+    var provider2 = root.CreateScope().ServiceProvider;
+
+    void GetServices<TService>(IServiceProvider provider)
+    {
+        provider.GetService<TService>();
+        provider.GetService<TService>();
+    }
+
+    GetServices<IFoo>(provider1);
+    GetServices<IBar>(provider1);
+    GetServices<IBaz>(provider1);
+    Console.WriteLine();
+    GetServices<IFoo>(provider2);
+    GetServices<IBar>(provider2);
+    GetServices<IBaz>(provider2);
+
+    输出:Foo Foo Bar Baz
+         Foo Foo Bar
 
